@@ -1,12 +1,13 @@
 import type { Status } from '../theme';
 import { metrics as sampleMetrics, type Metric } from './trends';
 import { RULES } from './report';
+import { GUIDANCE, doseStatus } from './rules';
 import { loadReadings, type SavedReading } from './storage';
 import { getSavedCheckins, num, type SavedCheckin } from './live';
 
 // Radiation readings: adjust these two lines if your teammate's Reading uses other names.
-const DOSE_KEYS = ['doseMsv', 'dose', 'msv', 'value'];
-const CUMULATIVE = true; // true: each reading is the running total. false: each reading is added to the total
+export const DOSE_KEYS = ['doseMsv', 'dose', 'msv', 'value'];
+export const CUMULATIVE = true; // true: each reading is the running total. false: each reading is added to the total
 
 function doseOf(reading: unknown): number | null {
   const r = reading as Record<string, unknown> | null;
@@ -66,6 +67,8 @@ function make(id: string, label: string, unit: string, decimals: number, values:
     else if (latest - base < -o.tol) trend = 'Falling';
   }
 
+  const status: Status = latest === null ? 'nominal' : o.status(latest, base);
+
   const all = [...values, ...(flag !== null ? [flag] : []), ...(baseline ? [baseline.low, baseline.high] : [])];
   let lo = all.length ? Math.min(...all) : 0;
   let hi = all.length ? Math.max(...all) : 1;
@@ -81,9 +84,12 @@ function make(id: string, label: string, unit: string, decimals: number, values:
 
   return {
     id, label, unit, decimals,
-    status: latest === null ? 'nominal' : o.status(latest, base),
+    status,
     trend, values, min: lo, max: hi, baseline, flag,
-    suggestion: o.suggestion ?? sample?.suggestion ?? '',
+    suggestion:
+      latest !== null && status !== 'nominal' && GUIDANCE[id]
+        ? status === 'alert' ? GUIDANCE[id].alert : GUIDANCE[id].watch
+        : o.suggestion ?? sample?.suggestion ?? '',
   };
 }
 
@@ -106,9 +112,9 @@ export function buildLiveMetrics(list: SavedCheckin[], readings: SavedReading[])
       flag: (b) => (b !== null ? b + RULES.heartJump : null), tol: 2, minSpread: 3,
     }),
     make('dose', 'Radiation dose', 'mSv', 0, doseSeries(readings), {
-      status: () => 'nominal', // no limits until they are set from NASA-STD-3001
-      flag: () => null, tol: 1, minSpread: 0, band: false, floorZero: true,
-      suggestion: 'Readings come from the radiation center. Budget and limits are to be set from NASA-STD-3001.',
+      status: (v) => doseStatus(v),
+      flag: () => RULES.doseCareerMsv * RULES.doseWatchFrac,
+      tol: 1, minSpread: 0, band: false, floorZero: true,
     }),
   ];
 }

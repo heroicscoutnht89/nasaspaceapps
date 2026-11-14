@@ -14,6 +14,7 @@ import { latestDose } from '../data/liveTrends';
 import { Card } from '../components/Card';
 import { StatusBadge } from '../components/StatusBadge';
 import { TopStrip } from '../components/TopStrip';
+import { SolarBanner } from '../components/SolarBanner';
 
 function saveText(text: string) {
   if (Platform.OS === 'web') {
@@ -65,6 +66,7 @@ export default function Report() {
         <ScrollView contentContainerStyle={styles.content}>
           <View style={styles.inner}>
             <Text style={styles.title}>Flight surgeon report</Text>
+            <SolarBanner />
             <Card>
               <Text style={styles.body}>
                 No check-ins saved yet. Complete a daily check-in and the report will be built from it.
@@ -84,6 +86,15 @@ export default function Report() {
       ))}
     </Card>
   );
+
+  const actions = data.actions.length ? (
+    <Card>
+      <Text style={styles.label}>What to do</Text>
+      {data.actions.map((a) => (
+        <Text key={a} style={styles.body}>• {a}</Text>
+      ))}
+    </Card>
+  ) : null;
 
   const indicators = (
     <Card>
@@ -142,18 +153,21 @@ export default function Report() {
             {mission.name} · Mission day {mission.day} · {data.count} check-in{data.count === 1 ? '' : 's'}
           </Text>
           <Text style={styles.title}>Flight surgeon report</Text>
+          <SolarBanner />
 
           {wide ? (
             <View style={styles.wideRow}>
               <View style={styles.leftCol}>{indicators}</View>
               <View style={styles.rightCol}>
                 {flags}
+                {actions}
                 {rest}
               </View>
             </View>
           ) : (
             <View style={styles.stack}>
               {flags}
+              {actions}
               {indicators}
               {rest}
             </View>

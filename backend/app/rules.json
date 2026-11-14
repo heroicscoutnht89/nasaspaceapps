@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "note": "Placeholder values. Review with a flight surgeon and NASA-STD-3001 before real use.",
+  "thresholds": {
+    "doseCareerMsv": 600, "doseWatchFrac": 0.5, "doseActionFrac": 0.8,
+    "sleepWatch": 6, "sleepAction": 4.5,
+    "moodWatch": 2,
+    "tensionWatch": 4,
+    "heartJump": 8, "heartHigh": 100, "heartLow": 50,
+    "sysWatch": 130, "diaWatch": 85, "sysLow": 90,
+    "tempHigh": 37.6, "tempLow": 36.0, "tempAction": 38.3,
+    "exerciseMin": 30,
+    "glucoseLow": 70, "glucoseHigh": 140,
+    "streak": 3
+  },
+  "guidance": {
+    "dose": {
+      "watch": "Your mission dose is above half of the 600 mSv NASA career limit (earlier flights also count). Review shelter time and planned activities with your flight surgeon.",
+      "alert": "Your dose is above 80% of the 600 mSv career limit. Contact your flight surgeon now to review your radiation plan."
+    },
+    "sleep": {
+      "watch": "Keep a fixed sleep window, dim lights an hour before, and avoid caffeine and hard exercise late in the day. If sleep stays low for 3 more days, send a report to the flight surgeon.",
+      "alert": "Very short sleep affects judgment and safety. Rest before any critical task if you can, tell the crew, and contact your flight surgeon."
+    },
+    "mood": {
+      "watch": "Talk with the crew or call home, take a short break, and try slow breathing. If low mood continues for several days, contact your flight surgeon.",
+      "alert": "Contact your flight surgeon or behavioral health support today."
+    },
+    "heart": {
+      "watch": "Rest, drink water, avoid caffeine and re-check when calm. If it stays raised for 3 days, send a report. Chest pain, fainting or shortness of breath: contact your flight surgeon now.",
+      "alert": "Contact your flight surgeon now."
+    },
+    "bp": {
+      "watch": "Sit quietly for 5 minutes and measure again. Check fluids and salt intake. If it is still outside range, send a report. Severe headache, chest pain or fainting: contact your flight surgeon now.",
+      "alert": "Contact your flight surgeon now."
+    },
+    "temp": {
+      "watch": "Measure again after 15 minutes, drink fluids and rest. Report it if it persists or comes with other symptoms.",
+      "alert": "Contact your flight surgeon now. Consider limiting close contact with crewmates until you hear back."
+    },
+    "glucose": {
+      "watch": "Measure again and note when you last ate. If it is out of range twice, send a report.",
+      "alert": "Contact your flight surgeon now."
+    },
+    "tension": {
+      "watch": "Take a short break or do a shared activity. If tension continues, tell the flight surgeon or behavioral health support.",
+      "alert": "Contact behavioral health support today."
+    },
+    "meals": {
+      "watch": "Try small, regular meals and extra fluids. Low appetite for several days reduces energy, muscle and bone health, so tell the flight surgeon if it continues.",
+      "alert": "Contact your flight surgeon."
+    },
+    "exercise": {
+      "watch": "Add a short session today. Resistive and cardio exercise help protect muscles and bones in microgravity.",
+      "alert": "Add a short session today."
+    },
+    "symptoms": {
+      "watch": "Note when each symptom started and how strong it is, and add details to the report note. Report eye or vision changes even if mild.",
+      "alert": "Nausea or vomiting, especially after a solar event: contact your flight surgeon now."
+    }
+  }
+}

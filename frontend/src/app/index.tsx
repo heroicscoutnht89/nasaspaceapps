@@ -9,11 +9,15 @@ import { Card } from '../components/Card';
 import { StatusBadge } from '../components/StatusBadge';
 import { TopStrip } from '../components/TopStrip';
 import { useRouter } from 'expo-router';
+import { DemoTools } from '../components/DemoTools';
+import { SolarBanner } from '../components/SolarBanner';
 
 export default function Home() {
   const router = useRouter();
 
   const [overall, setOverall] = useState<Overall>(emptyOverall);
+  const [tick, setTick] = useState(0);
+
   useFocusEffect(
     useCallback(() => {
       loadOverall().then(setOverall);
@@ -29,6 +33,8 @@ export default function Home() {
             {mission.name} · Mission day {mission.day} · {mission.phase}
           </Text>
           <Text style={styles.title}>Health status</Text>
+
+          <SolarBanner key={tick} />
 
           <Card style={styles.scoreCard}>
             <Text style={[styles.score, { color: overall.color }]}>{overall.score ?? '--'}</Text>
@@ -57,6 +63,8 @@ export default function Home() {
               <StatusBadge status={h.status} />
             </View>
           ))}
+
+          <DemoTools onChange={() => { loadOverall().then(setOverall); setTick((t) => t + 1); }} />
         </View>
       </ScrollView>
     </SafeAreaView>

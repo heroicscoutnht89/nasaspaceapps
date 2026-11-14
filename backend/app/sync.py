@@ -1,3 +1,4 @@
+import os
 from datetime import datetime, timezone
 from typing import Any
 
@@ -43,4 +44,12 @@ def make_router(db):
             raise HTTPException(status_code=404, detail="Unknown collection")
         return {"collection": collection, "count": db[collection].count_documents({})}
 
+    @router.delete("/demo/reset")
+    def demo_reset():
+        if os.getenv("DEMO_MODE") != "1":
+            raise HTTPException(status_code=403, detail="Demo reset is disabled")
+        for name in ALLOWED:
+            db[name].delete_many({})
+        return {"cleared": sorted(ALLOWED)}
+    
     return router
