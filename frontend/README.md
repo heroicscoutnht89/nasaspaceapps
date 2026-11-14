@@ -1,14 +1,14 @@
-Astronaut Health Companion
+**Astronaut Health Companion**
 
 A visual, offline-first tool that helps astronauts assess their own health on long space missions and gives simple guidance on what to do next. It runs on phones and on astronaut laptops (Expo / React Native Web), syncs to a small Python backend and MongoDB Atlas when the link is available, and is designed for low bandwidth and delayed communication.
 
 Not a medical device. This is a hackathon prototype for decision support only. Health limits are placeholders for review by medical experts, except the radiation career limit, which comes from NASA-STD-3001 (see Sources). Contact a flight surgeon for urgent symptoms.
 
-Why
+**Why**
 
 NASA's Human Research Program groups the risks of human spaceflight into five hazards: space radiation, isolation and confinement, distance from Earth, gravity fields, and hostile/closed environments. On long missions, crews must be able to notice problems early without waiting for a round trip to Mission Control. This app turns a three-minute daily check-in into clear status colors, trends against the astronaut's own baseline, and plain-language actions.
 
-Features
+**Features**
 
 Home: Overall status and score, the five NASA hazards, and solar event banner.
 
@@ -28,7 +28,7 @@ Offline-first: Everything is saved on the device first; entries queue and sync w
 
 Demo tools (optional): Load demo history, simulate a solar particle event, and reset data.
 
-Architecture
+**Architecture**
 
 Expo app (phone / laptop browser)
   AsyncStorage: checkins, readings, reportQueue, rulesCache, solarEvent
@@ -44,7 +44,7 @@ The backend owns the rules (thresholds and guidance text) and stores synced data
 
 Items are stored under the ID astronautId:itemId, so a retry never creates duplicates.
 
-Tech stack
+**Tech stack**
 
 Frontend: Expo (React Native, expo-router), React Native Web, react-native-svg, AsyncStorage, TypeScript.
 
@@ -52,7 +52,7 @@ Backend: Python 3.10+, FastAPI, uvicorn, pymongo, python-dotenv (mongomock as an
 
 Database: MongoDB Atlas (use MongoDB Compass to inspect data).
 
-Repository layout
+**Repository layout**
 
 backend/
   app/
@@ -71,9 +71,9 @@ frontend/
 
 If the Expo template on your device placed app inside src/, then components, data and theme.ts live in frontend/src/ next to it.
 
-Getting started
+**Getting started**
 
-Prerequisites
+**Prerequisites**
 
 Node.js (LTS) and npm.
 
@@ -81,7 +81,7 @@ Python 3.10 or newer.
 
 A MongoDB Atlas cluster (free tier is enough) with a database user and your IP in the Network Access list. Without Atlas, the backend falls back to an in-memory database that is cleared on restart.
 
-1. Backend
+**1. Backend**
 
 cd backend
 python -m venv .venv
@@ -104,7 +104,7 @@ MONGODB_DB: Database name (default astro_health).
 
 DEMO_MODE: Set to 1 to enable DELETE /demo/reset; keep it 0 otherwise.
 
-2. Frontend
+**2. Frontend**
 
 cd frontend
 npm install
@@ -119,7 +119,7 @@ EXPO_PUBLIC_API_URL: Backend address, for example http://localhost:8000.
 
 EXPO_PUBLIC_DEMO: Set to 1 to show the demo tools on Home.
 
-Backend API
+**Backend API**
 
 GET /health: Returns service and database status.
 
@@ -131,11 +131,11 @@ GET /rules: Returns the current thresholds and guidance text.
 
 DELETE /demo/reset: Clears the three collections; only available when DEMO_MODE=1.
 
-Rules and guidance
+**Rules and guidance**
 
 All limits and advice sentences live in backend/app/rules.json. The app downloads them at start, caches them, and falls back to built-in defaults when offline. Edit the file, reload the app, and flags and actions change with no code changes. The report shows which rules were used (built-in, cached or server, plus version).
 
-Demo walkthrough
+**Demo walkthrough**
 
 Save one reading in the Radiation tab (the demo loader copies its shape).
 
@@ -147,7 +147,7 @@ Open Trends and Report to show flags, recommended actions and the text export.
 
 Press Reset demo data twice to clear the device and the database.
 
-Known limitations
+**Known limitations**
 
 Health thresholds (except the radiation career limit) and guidance are placeholders and not clinically validated.
 
@@ -159,7 +159,7 @@ No login: everything is stored under one demo astronaut ID.
 
 Several check-ins in one day count as separate entries in baselines and streaks.
 
-Sources
+**Sources**
 
 NASA Human Research Program: Hazards, risks and ongoing research (nasa.gov/hrp).
 
