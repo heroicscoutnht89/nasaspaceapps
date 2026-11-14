@@ -1,8 +1,46 @@
-# Environment variables
-frontend/.env
-frontend/.env.*
-!frontend/.env.example
+# ---------- local env files ----------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p8
+*.p12
+*.jks
+*.mobileprovision
 
-backend/.env
-backend/.env.*
-!backend/.env.example
+# ---------- Node / Expo (frontend) ----------
+node_modules/
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+*.tsbuildinfo
+.metro-health-check*
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# Generated native folders
+/frontend/ios
+/frontend/android
+.kotlin/
+*.orig.*
+
+# ---------- Python (backend) ----------
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+*.egg-info/
+
+# ---------- OS and editor ----------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# ---------- Project-specific ----------
+example
