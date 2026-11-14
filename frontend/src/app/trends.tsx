@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
+import { useFocusEffect } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { theme } from '../theme';
 import { mission } from '../data/sample';
-import { Metric, metrics } from '../data/trends';
+import type { Metric } from '../data/trends';
+import { loadLiveMetrics } from '../data/liveTrends';
 import { Card } from '../components/Card';
 import { Chips } from '../components/Inputs';
 import { LineChart } from '../components/LineChart';
@@ -11,22 +13,39 @@ import { StatusBadge } from '../components/StatusBadge';
 import { TopStrip } from '../components/TopStrip';
 
 const ranges = [
-  { label: '7 days', days: 7 },
-  { label: '14 days', days: 14 },
-  { label: 'Whole mission', days: 0 },
+  { label: '7 entries', count: 7 },
+  { label: '14 entries', count: 14 },
+  { label: 'All', count: 0 },
 ];
 
-const latestText = (m: Metric) => `${m.values[m.values.length - 1].toFixed(m.decimals)} ${m.unit}`;
+const latestText = (m: Metric) =>
+  m.values.length ? `${m.values[m.values.length - 1].toFixed(m.decimals)} ${m.unit}` : 'No data yet';
 
 export default function Trends() {
   const { width } = useWindowDimensions();
   const wide = width >= 900;
+  const [metrics, setMetrics] = useState<Metric[]>([]);
   const [metricId, setMetricId] = useState('sleep');
-  const [rangeLabel, setRangeLabel] = useState('14 days');
+  const [rangeLabel, setRangeLabel] = useState('14 entries');
+
+  useFocusEffect(
+    useCallback(() => {
+      loadLiveMetrics().then(setMetrics);
+    }, []),
+  );
+
+  if (metrics.length === 0) {
+    return (
+      <SafeAreaView style={styles.screen} edges={['top']}>
+        <TopStrip />
+      </SafeAreaView>
+    );
+  }
 
   const metric = metrics.find((m) => m.id === metricId) ?? metrics[0];
   const range = ranges.find((r) => r.label === rangeLabel) ?? ranges[1];
-  const shown = range.days === 0 ? metric.values : metric.values.slice(-range.days);
+  const total = metric.values.length;
+  const shown = range.count === 0 ? metric.values : metric.values.slice(-range.count);
 
   return (
     <SafeAreaView style={styles.screen} edges={['top']}>
@@ -34,7 +53,7 @@ export default function Trends() {
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.inner}>
           <Text style={styles.kicker}>
-            {mission.name} · Mission day {mission.day} · sample data
+            {mission.name} · Mission day {mission.day} · from your saved entries
           </Text>
           <Text style={styles.title}>Trends</Text>
 
@@ -56,16 +75,25 @@ export default function Trends() {
                   </View>
                 </View>
                 <Text style={styles.latest}>{latestText(metric)}</Text>
-                <LineChart
-                  values={shown}
-                  lastDay={mission.day}
-                  min={metric.min}
-                  max={metric.max}
-                  baseline={metric.baseline}
-                  flag={metric.flag}
-                  color={theme.colors[metric.status]}
-                  summary={`${metric.label}, ${metric.trend}, latest ${latestText(metric)}`}
-                />
+                {shown.length === 0 ? (
+                  <Text style={styles.body}>
+                    No {metric.label.toLowerCase()} entries yet. Save a daily check-in
+                    {metric.id === 'dose' ? ' or a radiation reading' : ''} and the chart will appear here.
+                  </Text>
+                ) : (
+                  <LineChart
+                    values={shown}
+                    lastDay={total}
+                    startLabel={`Entry ${total - shown.length + 1}`}
+                    endLabel={`Entry ${total}`}
+                    min={metric.min}
+                    max={metric.max}
+                    baseline={metric.baseline}
+                    flag={metric.flag}
+                    color={theme.colors[metric.status]}
+                    summary={`${metric.label}, ${metric.trend}, latest ${latestText(metric)}`}
+                  />
+                )}
                 <Text style={styles.legend}>
                   {metric.baseline ? 'Blue band: your normal range. ' : ''}
                   {metric.flag !== null ? 'Dashed line: flag level.' : ''}

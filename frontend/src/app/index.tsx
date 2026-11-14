@@ -1,7 +1,10 @@
+import { useCallback, useState } from 'react';
+import { useFocusEffect } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { statusLabel, theme } from '../theme';
-import { hazards, mission, overall } from '../data/sample';
+import { theme } from '../theme';
+import { hazards, mission } from '../data/sample';
+import { emptyOverall, loadOverall, type Overall } from '../data/overall';
 import { Card } from '../components/Card';
 import { StatusBadge } from '../components/StatusBadge';
 import { TopStrip } from '../components/TopStrip';
@@ -9,6 +12,14 @@ import { useRouter } from 'expo-router';
 
 export default function Home() {
   const router = useRouter();
+
+  const [overall, setOverall] = useState<Overall>(emptyOverall);
+  useFocusEffect(
+    useCallback(() => {
+      loadOverall().then(setOverall);
+    }, []),
+  );
+
   return (
     <SafeAreaView style={styles.screen} edges={['top']}>
       <TopStrip />
@@ -20,10 +31,10 @@ export default function Home() {
           <Text style={styles.title}>Health status</Text>
 
           <Card style={styles.scoreCard}>
-            <Text style={[styles.score, { color: theme.colors[overall.status] }]}>{overall.score}</Text>
+            <Text style={[styles.score, { color: overall.color }]}>{overall.score ?? '--'}</Text>
             <View style={styles.scoreText}>
-              <Text style={[styles.scoreLabel, { color: theme.colors[overall.status] }]}>
-                {statusLabel[overall.status]}
+              <Text style={[styles.scoreLabel, { color: overall.color }]}>
+                {overall.label}
               </Text>
               <Text style={styles.body}>{overall.message}</Text>
             </View>

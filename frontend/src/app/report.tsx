@@ -1,12 +1,16 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   Platform, Pressable, ScrollView, Share, StyleSheet, Text, TextInput, View, useWindowDimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useFocusEffect } from 'expo-router';
+import { buildReport, buildReportText, type ReportData } from '../data/report';
+import { getSavedCheckins } from '../data/live';
 import { theme } from '../theme';
 import { mission } from '../data/sample';
-import { activeFlags, buildReportText, reportRows, symptomsReported } from '../data/report';
 import { queueReport } from '../data/reports';
+import { loadReadings } from '../data/storage';
+import { latestDose } from '../data/liveTrends';
 import { Card } from '../components/Card';
 import { StatusBadge } from '../components/StatusBadge';
 import { TopStrip } from '../components/TopStrip';
@@ -31,19 +35,51 @@ export default function Report() {
   const [note, setNote] = useState('');
   const [message, setMessage] = useState('');
 
+  const [data, setData] = useState<ReportData | null>(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      // getSavedCheckins().then((list) => setData(buildReport(list)));
+      Promise.all([getSavedCheckins(), loadReadings()]).then(([list, readings]) =>
+        setData(buildReport(list, latestDose(readings))),
+      );
+    }, []),
+  );
+
   async function queue() {
     try {
-      const waiting = await queueReport(buildReportText(note));
+      if (!data) return;
+      const waiting = await queueReport(buildReportText(data, note));
       setMessage(`Queued on this device. ${waiting} report${waiting === 1 ? '' : 's'} waiting to send.`);
     } catch {
       setMessage('Could not queue the report. Try again.');
     }
   }
 
+  if (!data) return <SafeAreaView style={styles.screen} edges={['top']}><TopStrip /></SafeAreaView>;
+
+  if (!data.hasData) {
+    return (
+      <SafeAreaView style={styles.screen} edges={['top']}>
+        <TopStrip />
+        <ScrollView contentContainerStyle={styles.content}>
+          <View style={styles.inner}>
+            <Text style={styles.title}>Flight surgeon report</Text>
+            <Card>
+              <Text style={styles.body}>
+                No check-ins saved yet. Complete a daily check-in and the report will be built from it.
+              </Text>
+            </Card>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
+
   const flags = (
     <Card style={styles.flags}>
       <Text style={styles.flagTitle}>Active flags</Text>
-      {activeFlags.map((f) => (
+      {(data.flags.length ? data.flags : ['No active flags']).map((f) => (
         <Text key={f} style={styles.body}>• {f}</Text>
       ))}
     </Card>
@@ -52,7 +88,7 @@ export default function Report() {
   const indicators = (
     <Card>
       <Text style={styles.label}>Indicator summary · last 7 days</Text>
-      {reportRows.map((r) => (
+      {data.rows.map((r) => (
         <View key={r.indicator} style={styles.row}>
           <View style={styles.rowText}>
             <Text style={styles.rowName}>{r.indicator}</Text>
@@ -70,7 +106,7 @@ export default function Report() {
     <View style={styles.stack}>
       <Card>
         <Text style={styles.label}>Symptoms reported</Text>
-        <Text style={styles.body}>{symptomsReported}</Text>
+        <Text style={styles.body}>{data.symptoms}</Text>
       </Card>
       <Card>
         <Text style={styles.label}>Note to flight surgeon (optional)</Text>
@@ -90,7 +126,7 @@ export default function Report() {
       <Pressable onPress={queue} style={styles.primary}>
         <Text style={styles.primaryText}>Queue for next link</Text>
       </Pressable>
-      <Pressable onPress={() => saveText(buildReportText(note))} style={styles.secondary}>
+      <Pressable onPress={() => data && saveText(buildReportText(data, note))} style={styles.secondary}>
         <Text style={styles.secondaryText}>{Platform.OS === 'web' ? 'Save as text file' : 'Share as text'}</Text>
       </Pressable>
       {message ? <Text style={styles.message}>{message}</Text> : null}
@@ -103,7 +139,7 @@ export default function Report() {
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.inner}>
           <Text style={styles.kicker}>
-            {mission.name} · Mission day {mission.day} · sample data
+            {mission.name} · Mission day {mission.day} · {data.count} check-in{data.count === 1 ? '' : 's'}
           </Text>
           <Text style={styles.title}>Flight surgeon report</Text>
 

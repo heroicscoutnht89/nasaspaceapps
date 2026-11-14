@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from .sync import make_router
 
 load_dotenv()
 MONGODB_USERNAME = os.environ.get("MONGODB_USERNAME", "").strip()
@@ -30,6 +31,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.include_router(make_router(db))
 
 @app.get("/health")
 def health():

@@ -4,6 +4,8 @@ import Svg, { Circle, G, Line, Polyline, Rect, Text as SvgText } from 'react-nat
 import { theme } from '../theme';
 
 type Props = {
+  startLabel?: string;
+  endLabel?: string;
   values: number[];
   lastDay: number;
   min: number;
@@ -15,7 +17,7 @@ type Props = {
   height?: number;
 };
 
-export function LineChart({ values, lastDay, min, max, baseline, flag, color, summary, height = 220 }: Props) {
+export function LineChart({ startLabel, endLabel, values, lastDay, min, max, baseline, flag, color, summary, height = 220 }: Props) {
   const [w, setW] = useState(0);
   const padL = 36;
   const padR = 12;
@@ -60,10 +62,10 @@ export function LineChart({ values, lastDay, min, max, baseline, flag, color, su
           />
           <Circle cx={x(n - 1)} cy={y(values[n - 1])} r={5} fill={color} />
           <SvgText x={padL} y={height - 6} fontSize={11} fill={theme.colors.textMuted} textAnchor="start">
-            {`Day ${startDay}`}
+            {startLabel ?? `Day ${startDay}`}
           </SvgText>
           <SvgText x={padL + innerW} y={height - 6} fontSize={11} fill={theme.colors.textMuted} textAnchor="end">
-            {`Day ${lastDay}`}
+            {endLabel ?? `Day ${lastDay}`}
           </SvgText>
         </Svg>
       ) : null}

@@ -2,11 +2,20 @@ import { Tabs } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useWindowDimensions } from 'react-native';
 import { theme } from '../theme';
+import { useEffect } from 'react';
+import { syncAll } from '../data/sync';
 
 export default function Layout() {
   const { width } = useWindowDimensions();
   const wide = width >= 900;
 
+  useEffect(() => {
+    syncAll();
+    const timer = setInterval(syncAll, 60000);
+    return () => clearInterval(timer);
+    }, 
+  []);
+  
   return (
     <>
       <StatusBar style="light" />
