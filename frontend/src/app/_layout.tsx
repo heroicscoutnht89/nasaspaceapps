@@ -24,6 +24,9 @@ export default function Layout() {
         <Tabs.Screen name="index" options={{ title: 'Home' }} />
         <Tabs.Screen name="checkin" options={{ title: 'Check-in' }} />
         <Tabs.Screen name="body" options={{ title: 'Body' }} />
+        <Tabs.Screen name="radiation" options={{ title: 'Radiation' }} />
+        <Tabs.Screen name="trends" options={{ title: 'Trends' }} />
+        <Tabs.Screen name="report" options={{ title: 'Report' }} />
       </Tabs>
     </>
   );
