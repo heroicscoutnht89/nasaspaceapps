@@ -69,7 +69,7 @@ frontend/
   theme.ts         all colors and spacing in one place
   .env.example
 
-If the Expo template on your device placed app inside src/, then components, data and theme.ts live in frontend/src/ next to it.
+If your Expo template placed app inside src/, then components, data and theme.ts live in frontend/src/ next to it.
 
 **Getting started**
 
@@ -92,9 +92,9 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 macOS / Linux: source .venv/bin/activate and cp .env.example .env.
 
-To check: open http://localhost:8000/health (should show "status":"ok") and http://localhost:8000/docs.
+Check it: open http://localhost:8000/health (should show "status":"ok") and http://localhost:8000/docs.
 
-Backend environment variables (backend/.env):
+**Backend environment variables (backend/.env):**
 
 MONGODB_URI: Atlas connection string (leave empty to use the in-memory fallback).
 
@@ -113,7 +113,7 @@ npx expo start
 
 Press w for the browser. On a phone, use Expo Go and set EXPO_PUBLIC_API_URL to your computer's LAN address (for example http://192.168.1.20:8000), because localhost on a phone means the phone itself. Restart Expo after changing .env.
 
-Frontend environment variables (frontend/.env):
+**Frontend environment variables (frontend/.env):**
 
 EXPO_PUBLIC_API_URL: Backend address, for example http://localhost:8000.
 
@@ -166,3 +166,9 @@ NASA Human Research Program: Hazards, risks and ongoing research (nasa.gov/hrp).
 Canadian Space Agency: Radiation monitoring on the ISS and why experiments are done in space.
 
 NASA Office of the Chief Health and Medical Officer, radiation protection technical brief (NASA-STD-3001): 600 mSv career effective dose limit, 250 mSv per solar particle event.
+
+**AI Acknowledgement**
+
+Claude was used to assist with generating and refining portions of the frontend source code and backend configuration, including descriptions and guidance text in backend/app/rules.json.
+
+AI-generated content was reviewed, tested, and adapted by the project team. The project team is responsible for the final implementation, functionality, and content of the application.
