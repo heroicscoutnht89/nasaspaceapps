@@ -1,4 +1,4 @@
-**Astronaut Health Companion**
+**Astronaut Health Companion HARMONY - Health Assessment & Risk Monitoring sYstem**
 
 A visual, offline-first tool that helps astronauts assess their own health on long space missions and gives simple guidance on what to do next. It runs on phones and on astronaut laptops (Expo / React Native Web), syncs to a small Python backend and MongoDB Atlas when the link is available, and is designed for low bandwidth and delayed communication.
 
@@ -169,6 +169,20 @@ NASA Office of the Chief Health and Medical Officer, radiation protection techni
 
 **AI Acknowledgement**
 
-Claude was used to assist with generating and refining portions of the frontend source code and backend configuration, including descriptions and guidance text in backend/app/rules.json.
+Claude was used as an AI-assisted development tool during the creation of Astronaut Health Companion. Its assistance covered portions of both the frontend and backend implementation, as well as technical documentation.
 
-AI-generated content was reviewed, tested, and adapted by the project team. The project team is responsible for the final implementation, functionality, and content of the application.
+Specifically, AI assistance was used for:
+
+Frontend development: Generating, refining, and debugging portions of the TypeScript and React Native code, including UI components, screen layouts, navigation, data handling, local storage, visualizations, and synchronization logic.
+
+Health assessment and guidance configuration: Assisting with the structure, organization, wording, and formatting of the backend rules.json file, including indicator descriptions, threshold configurations, status explanations, and recommended actions.
+
+Backend development: Assisting with portions of the Python and FastAPI implementation, including API endpoint structure, data synchronization, database interactions, and configuration.
+
+Documentation: Helping draft and refine the README, setup instructions, architecture descriptions, and technical explanations.
+
+Debugging and development support: Explaining errors, suggesting fixes, reviewing code changes, and helping improve consistency across the application.
+
+AI-generated suggestions and code were not treated as automatically correct or production-ready. The development team reviewed and adapted AI-assisted outputs, integrated them into the existing project, and performed testing to verify application functionality and compatibility.
+
+The development team retains responsibility for the final implementation, design decisions, code integration, and project deliverables. In particular, the health thresholds and guidance included in this prototype are not clinically validated medical recommendations. AI assistance does not constitute medical or scientific validation of the application's health assessment logic.
