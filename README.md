@@ -1,6 +1,6 @@
 # Astronaut Health Companion (HARMONY)
 
-**HARMONY: Health Assessment & Risk Monitoring sYstem**
+**HARMONY: Health Assessment & Risk MONitoring sYstem**
 
 A visual, offline-first tool that helps astronauts assess their own health on long space missions and gives simple guidance on what to do next. It runs on phones and on astronaut laptops (Expo / React Native Web), syncs to a small Python backend and MongoDB Atlas when the link is available, and is designed for low bandwidth and delayed communication.
 
