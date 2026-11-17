@@ -4,7 +4,7 @@
 
 A visual, offline-first tool that helps astronauts assess their own health on long space missions and gives simple guidance on what to do next. It runs on phones and on astronaut laptops (Expo / React Native Web), syncs to a small Python backend and MongoDB Atlas when the link is available, and is designed for low bandwidth and delayed communication.
 
-> **Not a medical device.** This is a hackathon prototype for decision support only. Health limits are placeholders for review by medical experts, except the radiation career limit, which comes from NASA-STD-3001 (see [Sources](#sources)). Contact a flight surgeon for urgent symptoms.
+> **Not a medical device.** This is a hackathon prototype for decision support only. Health limits are placeholders for review by medical experts, except the radiation career limit, which comes from NASA-STD-3001 (see [Sources](#sources)). Urgent symptoms during space missions should be carefully discussed and handled by flight surgeons.
 
 ## Contents
 
